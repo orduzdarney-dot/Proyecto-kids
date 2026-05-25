@@ -1,0 +1,371 @@
+:root {
+    --color-primario: #2c3e50;
+    --color-secundario: #3498db;
+    --color-acento: #e67e22;
+    --fondo-claro: #f4f7f6;
+    --blanco: #ffffff;
+    --fondo-estudiante: #f9f9f9;
+    --fondo-formulario-inline: #f0f7ff;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--fondo-claro);
+    margin: 0;
+    padding: 20px;
+    color: var(--color-primario);
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.contenedor {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+form {
+    background: var(--blanco);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: flex-end;
+}
+
+.grupo-formulario {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    width: 200px;
+}
+
+input, button {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: var(--blanco);
+    color: var(--color-primario);
+}
+
+button {
+    background-color: var(--color-secundario);
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+#contenedor-rutas {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+
+.contenedor-tarjeta-ruta {
+    background: var(--blanco);
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-top: 5px solid var(--color-secundario);
+    color: var(--color-primario);
+}
+
+.encabezado-tarjeta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.contenido-tarjeta { 
+    margin: 15px 0; 
+}
+
+.lista-estudiantes {
+    list-style: none;
+    padding: 0;
+    margin-top: 10px;
+}
+
+.item-estudiante {
+    background: var(--fondo-estudiante);
+    margin: 5px 0;
+    padding: 8px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    border-left: 3px solid var(--color-acento);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btn-editar-estudiante {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1em;
+    color: var(--color-secundario);
+    padding: 0;
+    margin-left: auto;
+    margin-right: 10px;
+}
+
+.btn-eliminar-estudiante {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9em;
+    color: #e74c3c;
+    padding: 0;
+}
+
+.acciones-tarjeta {
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+}
+
+.btn-agregar-estudiante {
+    background: #27ae60;
+}
+.btn-agregar-estudiante:hover { 
+    background: #219150; 
+}
+
+.btn-editar-ruta {
+    background: #f39c12;
+}
+
+.btn-editar-ruta:hover { 
+    background: #d68910;
+}
+
+.btn-eliminar-ruta {
+    background: #e74c3c;
+    
+}
+.btn-eliminar-ruta:hover { 
+    background: #c0392b; 
+}
+
+/* Ícono del clima */
+#info-clima {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    justify-content: center;
+}
+
+.icono-clima {
+    width: 36px;
+    height: 36px;
+}
+
+.formulario-inline {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 10px;
+    background: var(--fondo-formulario-inline);
+    border: 1px solid #bcd8f7;
+    border-radius: 6px;
+    padding: 10px;
+    animation: aparecer 0.2s ease;
+}
+
+@keyframes aparecer {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.input-inline {
+    padding: 8px;
+    border: 1px solid #bcd8f7;
+    border-radius: 4px;
+    font-size: 0.9em;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.acciones-inline {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-confirmar-inline {
+    background: #27ae60;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 14px;
+    cursor: pointer;
+    font-size: 0.85em;
+    flex: 1;
+}
+.btn-confirmar-inline:hover { background: #219150; }
+
+.btn-cancelar-inline {
+    background: #95a5a6;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 14px;
+    cursor: pointer;
+    font-size: 0.85em;
+    flex: 1;
+}
+.btn-cancelar-inline:hover { background: #7f8c8d; }
+
+.item-vacio {
+    color: #999;
+    font-style: italic;
+}
+
+
+.mensaje-error {
+    color: #e74c3c;
+    font-size: 0.78em;
+    margin-top: 4px;
+}
+
+.input-error {
+    border-color: #e74c3c !important;
+    outline: none;
+}
+
+
+/* Navegación SPA */
+.panel-nav {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 25px;
+    background: var(--blanco);
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn-nav {
+    background-color: transparent;
+    color: var(--color-primario);
+    border: 2px solid var(--color-secundario);
+    font-weight: bold;
+    padding: 10px 20px;
+}
+
+.btn-nav:hover, .btn-nav.activo {
+    background-color: var(--color-secundario);
+    color: white;
+}
+
+.vista-oculta {
+    display: none;
+}
+
+.vista-activa {
+    display: block;
+    animation: aparecer 0.3s ease;
+}
+
+.contenedor-lista-simple {
+    background: var(--blanco);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-top: 5px solid var(--color-secundario);
+    padding: 15px;
+}
+
+.item-lista-simple {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    font-size: 1.05em;
+    color: var(--color-primario);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.item-lista-simple:last-child {
+    border-bottom: none;
+}
+
+@media (min-width: 768px) {
+    #contenedor-rutas {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    #contenedor-rutas {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+
+
+
+body.modo-oscuro {
+    --color-primario: #e0e0e0;
+    --color-secundario: #5dade2;
+    --color-acento: #f0a500;
+    --fondo-claro: #1a1a2e;
+    --blanco: #202556;
+    --fondo-estudiante: #3d3d5c;
+    --fondo-formulario-inline: #252545;
+}
+
+#btn-modo-oscuro {
+    margin-top: 10px;
+    background: transparent;
+    border: 2px solid var(--color-primario);
+    color: var(--color-primario);
+    border-radius: 20px;
+    padding: 6px 16px;
+    cursor: pointer;
+    font-size: 0.85em;
+    transition: all 0.3s;
+}
+#btn-modo-oscuro:hover {
+    background: var(--color-primario);
+    color: var(--fondo-claro);
+    border-color: var(--color-primario);
+}
+
+
+
+
+
+
+
+
+
+
+.imagen-ruta-card {
+
+   
+    width: 92%;             /* Ocupa casi todo el ancho de la tarjeta */
+    height: auto;           /* Mantiene la proporción original (imagen completa) */
+    display: block;         /* Necesario para centrar con margin auto */
+    margin: 15px auto;      /* Centrado horizontal y margen vertical */
+    border-radius: 8px;     /* Bordes redondeados */
+}

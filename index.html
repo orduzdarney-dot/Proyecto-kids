@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rutas Seguras Kids</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="contenedor">
+        <header>
+            <h1>Rutas Seguras Kids</h1>
+            <div id="info-clima">Cargando clima...</div>
+            <button id="btn-modo-oscuro">🌙 Modo Oscuro</button>
+        </header>
+
+        <nav id="panel-navegacion" class="panel-nav">
+            <button id="nav-rutas" class="btn-nav activo">📍 Rutas</button>
+            <button id="nav-estudiantes" class="btn-nav">🎓 Estudiantes</button>
+            <button id="nav-conductores" class="btn-nav">🚌 Conductores</button>
+        </nav>
+
+        <div id="vista-rutas" class="vista-activa">
+
+        <section id="seccion-formulario-ruta">
+            <h2>Agregar Nueva Ruta</h2>
+            <form id="formulario-ruta">
+                <div class="grupo-formulario">
+                    <label for="nombreRuta">Nombre de la Ruta</label>
+                    <input type="text" id="nombreRuta" required placeholder="Ej: Ruta Norte">
+                </div>
+                <div class="grupo-formulario">
+                    <label for="nombreConductor">Conductor</label>
+                    <input type="text" id="nombreConductor" required placeholder="Nombre del conductor">
+                </div>
+                <div class="grupo-formulario">
+                    <label for="horaSalida">Hora Salida</label>
+                    <input type="time" id="horaSalida" required>
+                </div>
+                <button type="submit">Crear Ruta</button>
+            </form>
+        </section>
+
+            <section id="seccion-lista-rutas">
+                <h2>Rutas Activas</h2>
+                <div id="contenedor-rutas"></div>
+            </section>
+        </div>
+
+        <div id="vista-estudiantes" class="vista-oculta">
+            <section>
+                <h2>Directorio de Estudiantes</h2>
+                <div id="contenedor-todos-estudiantes" class="contenedor-lista-simple"></div>
+            </section>
+        </div>
+
+        <div id="vista-conductores" class="vista-oculta">
+            <section>
+                <h2>Directorio de Conductores</h2>
+                <div id="contenedor-todos-conductores" class="contenedor-lista-simple"></div>
+            </section>
+        </div>
+    </div>
+
+    <script src="main.js" type="module"></script>
+</body>
+</html>
