@@ -1,3 +1,4 @@
+
 const plantilla = document.createElement('template');
 plantilla.innerHTML = `
     <link rel="stylesheet" href="style.css">
@@ -14,7 +15,7 @@ plantilla.innerHTML = `
                 <ul class="lista-estudiantes" id="t-estudiantes"></ul>
             </div>
 
-           
+            <!-- Este es el cuadrito oculto que aparece para agregar o editar un niño -->
             <div class="formulario-inline" id="formulario-inline" style="display:none;">
                 <input type="text" class="input-inline" id="input-estudiante" placeholder="Nombre del estudiante">
                 <div class="acciones-inline">
@@ -23,7 +24,7 @@ plantilla.innerHTML = `
                 </div>
             </div>
 
-            
+            <!-- Este es el cuadrito oculto para cambiar el nombre de la ruta o del conductor -->
             <div class="formulario-inline" id="formulario-inline-ruta" style="display:none;">
                 <input type="text" class="input-inline" id="input-nombre-ruta" placeholder="Nuevo nombre de la ruta">
                 <input type="text" class="input-inline" id="input-conductor-ruta" placeholder="Nuevo nombre del conductor">
@@ -34,6 +35,7 @@ plantilla.innerHTML = `
             </div>
 
         </div>
+        <!-- Los botones principales de cada tarjeta -->
         <div class="acciones-tarjeta">
             <button class="btn-agregar-estudiante" id="agregar-estudiante">+ Asignar Estudiante</button>
             <button class="btn-editar-ruta" id="editar-ruta">✏️ Editar </button>
@@ -43,6 +45,7 @@ plantilla.innerHTML = `
 `;
 
 
+
 const obtenerEmojiHora = (hora) => {
     const horas = parseInt(hora.split(':')[0]);
     if (horas >= 5 && horas < 12)  return '🌅'; 
@@ -50,21 +53,22 @@ const obtenerEmojiHora = (hora) => {
     return '🌙'; 
 };
 
+// 
 class TarjetaRuta extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
         this.shadowRoot.appendChild(plantilla.content.cloneNode(true));
-        this._modoEdicionEstudiante = { type: null, index: null }; // Para edición de estudiantes
-        this._modoEdicionRuta = false; // Para edición de ruta
+        this._modoEdicionEstudiante = { type: null, index: null }; // Para editar estudiantes
+        this._modoEdicionRuta = false; // Para editar  ruta
     }
 
+    // Esto recibe los datos nombre, conductor, y los guarda en una variable int
     set datoRuta(datos) {
         this._datos = datos;
         this.renderizar();
     }
 
-    // Métodos para el formulario inline de edición de ruta
     _mostrarFormularioEdicionRuta() {
         const formulario = this.shadowRoot.getElementById('formulario-inline-ruta');
         const inputNombre = this.shadowRoot.getElementById('input-nombre-ruta');
@@ -85,7 +89,6 @@ class TarjetaRuta extends HTMLElement {
         this._modoEdicionRuta = false;
     }
 
-    // Métodos para el formulario inline de edición de estudiante
     _mostrarFormularioEstudiante(modo, valorInicial = '') {
         const formulario = this.shadowRoot.getElementById('formulario-inline');
         const input = this.shadowRoot.getElementById('input-estudiante');
@@ -103,12 +106,14 @@ class TarjetaRuta extends HTMLElement {
         this._modoEdicionEstudiante = { type: null, index: null };
     }
 
+    // llena con informacion real los espacios
     renderizar() {
         if (!this._datos) return;
         const { id, nombre, conductor, hora, estudiantes } = this._datos;
 
         const emoji = obtenerEmojiHora(hora);
 
+        // Pone el emoji y el nombre de la ruta en el encabezado de la tarjeta
         this.shadowRoot.getElementById('t-nombre').textContent = `${emoji} ${nombre}`;
         this.shadowRoot.getElementById('t-conductor').textContent = conductor;
         this.shadowRoot.getElementById('t-hora').textContent = `Salida: ${hora}`;
@@ -116,6 +121,7 @@ class TarjetaRuta extends HTMLElement {
         const lista = this.shadowRoot.getElementById('t-estudiantes');
         lista.replaceChildren();
 
+        // Si no hay niños mostrar mensaje que diga "Sin estudiantes"
         if (estudiantes.length === 0) {
             const sinEstudiantes = document.createElement('li');
             sinEstudiantes.className = 'item-estudiante item-vacio';
@@ -123,6 +129,7 @@ class TarjetaRuta extends HTMLElement {
             lista.appendChild(sinEstudiantes);
         }
 
+        // estudiante: borrar ,editar 
         estudiantes.forEach((estudiante, indice) => {
             const li = document.createElement('li');
             li.className = 'item-estudiante';
@@ -154,7 +161,7 @@ class TarjetaRuta extends HTMLElement {
             lista.appendChild(li);
         });
 
-        // Eventos para el formulario inline de estudiantes
+        // Botón de guardar para el cuadrito de agregar o editar estudiante
         this.shadowRoot.getElementById('btn-confirmar').onclick = () => {
             const valor = this.shadowRoot.getElementById('input-estudiante').value.trim();
             if (!valor) return;
@@ -175,29 +182,30 @@ class TarjetaRuta extends HTMLElement {
             this._ocultarFormularioEstudiante();
         };
 
-        
+        // Botón para cerrar el cuadro 
         this.shadowRoot.getElementById('btn-cancelar').onclick = () => {
             this._ocultarFormularioEstudiante();
         };
 
-       
+       // Botón verde de la tarjeta para abrir el cuadrito de "Asignar Estudiante"
         this.shadowRoot.getElementById('agregar-estudiante').onclick = () => {
             this._ocultarFormularioEdicionRuta(); // Ocultar formulario de ruta si está abierto
             this._mostrarFormularioEstudiante({ type: 'new' });
         };
 
+        // Botón naranja de la tarjeta para abrir el cuadro de "Editar Ruta"
         this.shadowRoot.getElementById('editar-ruta').onclick = () => {
             this._ocultarFormularioEstudiante(); // Ocultar formulario de estudiante si está abierto
             this._mostrarFormularioEdicionRuta();
         };
 
-        // Eventos para el formulario inline de edición de ruta
+        // Botón de guardar para el cuadrito de editar ruta
         this.shadowRoot.getElementById('btn-confirmar-ruta').onclick = () => {
             const nuevoNombre = this.shadowRoot.getElementById('input-nombre-ruta').value.trim();
             const nuevoConductor = this.shadowRoot.getElementById('input-conductor-ruta').value.trim();
 
             if (!nuevoNombre || !nuevoConductor) {
-                alert('El nombre y el conductor no pueden estar vacíos.'); // Simple validación UI
+                alert('El nombre y el conductor no pueden estar vacíos.'); // Validación 
                 return;
             }
 
@@ -213,6 +221,7 @@ class TarjetaRuta extends HTMLElement {
             this._ocultarFormularioEdicionRuta();
         };
 
+        // Botón rojo para borrar toda la tarjeta
         this.shadowRoot.getElementById('eliminar-ruta').onclick = () => {
             this.dispatchEvent(new CustomEvent('eliminar-ruta', {
                 detail: { id },
@@ -223,4 +232,5 @@ class TarjetaRuta extends HTMLElement {
     }
 }
 
+// Registra tarjeta personalizada para que el navegador la reconozca
 customElements.define('tarjeta-ruta', TarjetaRuta);

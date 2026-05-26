@@ -1,15 +1,18 @@
+
 import './tarjeta.js';
+
 
 const API_KEY = `6a5b087b9af897b6d5a45fce26d11803`;
 const CIUDAD = 'Bucaramanga';
 
+// el codgo anda cuanda la pagina carga completamente
 document.addEventListener('DOMContentLoaded', () => {
 
     const formularioRuta = document.getElementById('formulario-ruta');
     const contenedorRutas = document.getElementById('contenedor-rutas');
     const infoClima = document.getElementById('info-clima');
 
-    // Referencias navegación SPA
+    
     const navRutas = document.getElementById('nav-rutas');
     const navEstudiantes = document.getElementById('nav-estudiantes');
     const navConductores = document.getElementById('nav-conductores');
@@ -21,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const contenedorTodosEstudiantes = document.getElementById('contenedor-todos-estudiantes');
     const contenedorTodosConductores = document.getElementById('contenedor-todos-conductores');
 
+    // cambiar entre las pestañas de rutas, estudiantes y conductores
     const cambiarVista = (vistaActiva, btnActivo) => {
         [vistaRutas, vistaEstudiantes, vistaConductores].forEach(v => {
             v.classList.remove('vista-activa');
@@ -33,18 +37,21 @@ document.addEventListener('DOMContentLoaded', () => {
         btnActivo.classList.add('activo');
     };
 
+    // Configuracion los botones de navegación 
     navRutas.addEventListener('click', () => cambiarVista(vistaRutas, navRutas));
     
     navEstudiantes.addEventListener('click', () => {
-        cambiarVista(vistaEstudiantes, navEstudiantes);
-        renderizarDirectorios();
+        cambiarVista(vistaEstudiantes, navEstudiantes); // Cambia a la pestaña de estudiantes
+        renderizarDirectorios(); // Actualiza la lista de nombres
     });
 
     navConductores.addEventListener('click', () => {
-        cambiarVista(vistaConductores, navConductores);
-        renderizarDirectorios();
+        cambiarVista(vistaConductores, navConductores); // Cambia a la pestaña de conductores
+        renderizarDirectorios(); // Actualiza la lista de nombres
     });
 
+    // crea lista de los estudiantes
+    // lista de conductores 
     const renderizarDirectorios = () => {
         if (!contenedorTodosEstudiantes || !contenedorTodosConductores) return;
         
@@ -53,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (todosEstudiantes.length === 0) {
             contenedorTodosEstudiantes.innerHTML = '<p class="item-vacio">No hay estudiantes registrados en ninguna ruta.</p>';
         } else {
-            contenedorTodosEstudiantes.innerHTML = todosEstudiantes.map(e => `<div class="item-lista-simple">🎓 <strong>${e.nombre}</strong> <span style="margin-left:auto; font-size:0.85em; color:gray;">(Ruta: ${e.ruta})</span></div>`).join('');
+            contenedorTodosEstudiantes.innerHTML = todosEstudiantes.map(e => `<div class="item-lista-simple">🎓 <strong>${e.nombre}</strong> <span style="margin-left:auto; font-size:0.85em; color:gray;">Ruta: ${e.ruta}</span></div>`).join('');
         }
 
         // Conductores
@@ -61,24 +68,29 @@ document.addEventListener('DOMContentLoaded', () => {
         if (todosConductores.length === 0) {
             contenedorTodosConductores.innerHTML = '<p class="item-vacio">No hay conductores registrados.</p>';
         } else {
-            contenedorTodosConductores.innerHTML = todosConductores.map(c => `<div class="item-lista-simple">🚌 <strong>${c.nombre}</strong> <span style="margin-left:auto; font-size:0.85em; color:gray;">(Ruta: ${c.ruta})</span></div>`).join('');
+            contenedorTodosConductores.innerHTML = todosConductores.map(c => `<div class="item-lista-simple">🚌 <strong>${c.nombre}</strong> <span style="margin-left:auto; font-size:0.85em; color:gray;">Ruta: ${c.ruta}</span></div>`).join('');
         }
     };
 
+    // guarda en la memoria del navegador
     let rutas = JSON.parse(localStorage.getItem('rutas_kids')) || [];
 
+    //lo mismo ^
     const guardarEnLocalStorage = () => {
         localStorage.setItem('rutas_kids', JSON.stringify(rutas));
     };
 
     const btnModoOscuro = document.getElementById('btn-modo-oscuro');
 
-    // Recordar preferencia al cargar
+    // si ya habia activo el modo oscuro se deja 
+
+    // Recordar al cargar
     if (localStorage.getItem('modo-oscuro') === 'true') {
         document.body.classList.add('modo-oscuro');
         if (btnModoOscuro) btnModoOscuro.textContent = '☀️ Modo Claro';
     }
 
+    // Config el botón que cambia entre  claro y oscuro
     if (btnModoOscuro) {
         btnModoOscuro.addEventListener('click', () => {
             document.body.classList.toggle('modo-oscuro');
@@ -88,6 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+     // la api ,el clima 
      const obtenerClima = async () => {
         try {
             const respuesta = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${CIUDAD}&appid=${API_KEY}&units=metric&lang=es`);
@@ -106,7 +119,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // ── Validación JS personalizada ──────────────────────────────────────────
+    // Validaciónes
+    
     const mostrarError = (idInput, mensaje) => {
         const input = document.getElementById(idInput);
         const existente = input.parentElement.querySelector('.mensaje-error');
@@ -147,8 +161,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         return valido;
     };
-    // ────────────────────────────────────────────────────────────────────────
 
+    // 
+    //guarda la ruta 
     formularioRuta.addEventListener('submit', (e) => {
         e.preventDefault();
         limpiarErrores();
@@ -177,15 +192,19 @@ document.addEventListener('DOMContentLoaded', () => {
         document.dispatchEvent(evento);
     });
 
+    // ruta creada con exito
     document.addEventListener('rutaAgregada', (e) => {
         console.log('Sistema: Nueva ruta creada:', e.detail.nombre);
     });
 
+    // ///////////////////////////////////////////////////////////////////////////////////
     const renderizarRutas = () => {
         contenedorRutas.replaceChildren();
         rutas.forEach(ruta => {
             const tarjeta = document.createElement('tarjeta-ruta');
             tarjeta.datoRuta = ruta;
+
+            // 
 
             tarjeta.addEventListener('eliminar-ruta', (e) => {
                 rutas = rutas.filter(r => r.id != e.detail.id);
@@ -193,7 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 renderizarRutas();
             });
 
-            // Agregar estudiante desde formulario inline
+            // Agregar estudiante desde la tarjeta
             tarjeta.addEventListener('agregar-estudiante-inline', (e) => {
                 const { id, nombre } = e.detail;
                 const indiceRuta = rutas.findIndex(r => r.id == id);
@@ -202,7 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 renderizarRutas();
             });
 
-            // Editar estudiante desde formulario inline (ahora trae el nombre en el detail)
+            // editar el nombre de un niño que ya está en la ruta
             tarjeta.addEventListener('editar-estudiante', (e) => {
                 const { id, indice, nombre } = e.detail;
                 const ruta = rutas.find(r => r.id == id);
@@ -213,6 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
+            // Eliminar un niño que ya está en la ruta
             tarjeta.addEventListener('eliminar-estudiante', (e) => {
                 const { id, indice } = e.detail;
                 const ruta = rutas.find(r => r.id == id);
@@ -223,18 +243,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            // Editar ruta desde formulario inline
+            // Editar el nombre de la ruta o el conductor desde la tarjeta
             tarjeta.addEventListener('editar-ruta-inline', (e) => {
                 const { id, nuevoNombre, nuevoConductor } = e.detail;
                 const ruta = rutas.find(r => r.id == id);
 
                 if (!ruta) return;
 
-                // Validar nombre duplicado (excluyendo la ruta actual)
+                // Validación: ya existe
                 if (rutas.some(r => r.id != id && r.nombre.toLowerCase() === nuevoNombre.toLowerCase())) {
                     alert('Ya existe una ruta con ese nombre.');
-                    // Se podría mejorar la UX para mostrar el error dentro del shadow DOM,
-                    // pero por ahora un alert es consistente con el comportamiento previo.
+                    
                     return;
                 }
 
@@ -245,10 +264,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 renderizarRutas();
             });
 
-            contenedorRutas.appendChild(tarjeta);
+            contenedorRutas.appendChild(tarjeta); // pone la tarjeta terminada 
         });
     };
 
+    // tenemos el clima y muestra las rutas que ya esten guardadas
     obtenerClima();
     renderizarRutas();
 });
