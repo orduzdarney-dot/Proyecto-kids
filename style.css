@@ -246,7 +246,7 @@ button:hover {
 }
 
 
-/* Navegación SPA */
+
 .panel-nav {
     display: flex;
     justify-content: center;
@@ -363,9 +363,21 @@ body.modo-oscuro {
 .imagen-ruta-card {
 
    
-    width: 92%;             /* Ocupa casi todo el ancho de la tarjeta */
-    height: auto;           /* Mantiene la proporción original (imagen completa) */
-    display: block;         /* Necesario para centrar con margin auto */
-    margin: 15px auto;      /* Centrado horizontal y margen vertical */
-    border-radius: 8px;     /* Bordes redondeados */
+    width: 92%;             
+    height: auto;           
+    display: block;        
+    margin: 15px auto;      
+    border-radius: 8px;     
+}
+
+.rutaNorte {
+    background-color: #3498db; 
+}
+
+.rutaSur {
+    background-color: #72f849; 
+}
+
+.rutaCentro {
+    background-color: #e29416; 
 }

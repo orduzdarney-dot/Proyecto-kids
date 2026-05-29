@@ -13,35 +13,57 @@ document.addEventListener('DOMContentLoaded', () => {
     const infoClima = document.getElementById('info-clima');
 
     
+    let rutas = JSON.parse(localStorage.getItem('rutas_kids')) || [];
+
+    
+    if (rutas.length === 0) {
+        rutas = [
+            { id: 1, nombre: 'Ruta Norte', conductor: 'Juan Pérez', hora: '06:00', estudiantes: ['Ana Sofía', 'Mateo López'] },
+            { id: 2, nombre: 'Ruta Sur', conductor: 'María García', hora: '06:30', estudiantes: ['Carlos Ruiz', 'Lucía Torres'] },
+            { id: 3, nombre: 'Ruta Centro', conductor: 'Roberto Sosa', hora: '07:00', estudiantes: ['Elena Mar', 'Diego Beltrán'] }
+        ];
+        localStorage.setItem('rutas_kids', JSON.stringify(rutas));
+    }
+
+    
     const navRutas = document.getElementById('nav-rutas');
     const navEstudiantes = document.getElementById('nav-estudiantes');
     const navConductores = document.getElementById('nav-conductores');
+    const navRutasNorte = document.getElementById('nav-rutas-norte');
+    const navRutasSur = document.getElementById('nav-rutas-sur');
+    const RutasCentro = document.getElementById('nav-rutas-centro');
+
 
     const vistaRutas = document.getElementById('vista-rutas');
     const vistaEstudiantes = document.getElementById('vista-estudiantes');
     const vistaConductores = document.getElementById('vista-conductores');
+    const vistaRutasNorte = document.getElementById('vista-rutas-norte');
+    const vistaRutasSur = document.getElementById('vista-rutas-sur');
+    const vistaRutasCentro = document.getElementById('vista-rutas-centro');
+
+
 
     const contenedorTodosEstudiantes = document.getElementById('contenedor-todos-estudiantes');
     const contenedorTodosConductores = document.getElementById('contenedor-todos-conductores');
 
     // cambiar entre las pestañas de rutas, estudiantes y conductores
     const cambiarVista = (vistaActiva, btnActivo) => {
-        [vistaRutas, vistaEstudiantes, vistaConductores].forEach(v => {
-            v.classList.remove('vista-activa');
-            v.classList.add('vista-oculta');
+        [vistaRutas, vistaEstudiantes, vistaConductores, vistaRutasNorte, vistaRutasSur, vistaRutasCentro].forEach(v => {
+            if (v) { v.classList.remove('vista-activa'); v.classList.add('vista-oculta'); }
         });
-        [navRutas, navEstudiantes, navConductores].forEach(b => b.classList.remove('activo'));
+        [navRutas, navEstudiantes, navConductores, navRutasNorte, navRutasSur, RutasCentro].forEach(b => {
+            if (b) b.classList.remove('activo');
+        });
 
-        vistaActiva.classList.remove('vista-oculta');
-        vistaActiva.classList.add('vista-activa');
-        btnActivo.classList.add('activo');
+        if (vistaActiva) { vistaActiva.classList.remove('vista-oculta'); vistaActiva.classList.add('vista-activa'); }
+        if (btnActivo) btnActivo.classList.add('activo');
     };
 
     // Configuracion los botones de navegación 
     navRutas.addEventListener('click', () => cambiarVista(vistaRutas, navRutas));
     
     navEstudiantes.addEventListener('click', () => {
-        cambiarVista(vistaEstudiantes, navEstudiantes); // Cambia a la pestaña de estudiantes
+        cambiarVista(vistaEstudiantes, navEstudiantes);
         renderizarDirectorios(); // Actualiza la lista de nombres
     });
 
@@ -49,33 +71,44 @@ document.addEventListener('DOMContentLoaded', () => {
         cambiarVista(vistaConductores, navConductores); // Cambia a la pestaña de conductores
         renderizarDirectorios(); // Actualiza la lista de nombres
     });
+    if (navRutasNorte) navRutasNorte.addEventListener('click', () => cambiarVista(vistaRutasNorte, navRutasNorte));
+    if (navRutasSur) navRutasSur.addEventListener('click', () => cambiarVista(vistaRutasSur, navRutasSur));
+    if (RutasCentro) RutasCentro.addEventListener('click', () => cambiarVista(vistaRutasCentro, RutasCentro));
 
-    // crea lista de los estudiantes
-    // lista de conductores 
-    const renderizarDirectorios = () => {
+    
+    const filtroEstudiantes = document.getElementById('filtro-ruta-estudiantes');
+    if (filtroEstudiantes) {
+        filtroEstudiantes.addEventListener('change', (e) => {
+            renderizarDirectorios(e.target.value);
+        });
+    }
+
+    const renderizarDirectorios = (filtro = 'Todas') => {
         if (!contenedorTodosEstudiantes || !contenedorTodosConductores) return;
+
         
-        // Estudiantes
-        const todosEstudiantes = rutas.flatMap(r => r.estudiantes.map(e => ({nombre: e, ruta: r.nombre})));
+        let todosEstudiantes = rutas.flatMap(r => r.estudiantes.map(e => ({ nombre: e, ruta: r.nombre })));
+
+        // filtro 
+        if (filtro !== 'Todas') {
+            todosEstudiantes = todosEstudiantes.filter(e => e.ruta === filtro);
+        }
+
         if (todosEstudiantes.length === 0) {
             contenedorTodosEstudiantes.innerHTML = '<p class="item-vacio">No hay estudiantes registrados en ninguna ruta.</p>';
         } else {
             contenedorTodosEstudiantes.innerHTML = todosEstudiantes.map(e => `<div class="item-lista-simple">🎓 <strong>${e.nombre}</strong> <span style="margin-left:auto; font-size:0.85em; color:gray;">Ruta: ${e.ruta}</span></div>`).join('');
         }
 
-        // Conductores
-        const todosConductores = rutas.map(r => ({nombre: r.conductor, ruta: r.nombre}));
+        ///////////////////// Conductores
+        const todosConductores = rutas.map(r => ({ nombre: r.conductor, ruta: r.nombre }));
         if (todosConductores.length === 0) {
             contenedorTodosConductores.innerHTML = '<p class="item-vacio">No hay conductores registrados.</p>';
         } else {
-            contenedorTodosConductores.innerHTML = todosConductores.map(c => `<div class="item-lista-simple">🚌 <strong>${c.nombre}</strong> <span style="margin-left:auto; font-size:0.85em; color:gray;">Ruta: ${c.ruta}</span></div>`).join('');
+            contenedorTodosConductores.innerHTML = todosConductores.map(c => `<div class="item-lista-simple"><strong>${c.nombre}</strong> <span style="margin-left:auto; font-size:0.85em; color:gray;">Ruta: ${c.ruta}</span></div>`).join('');
         }
     };
 
-    // guarda en la memoria del navegador
-    let rutas = JSON.parse(localStorage.getItem('rutas_kids')) || [];
-
-    //lo mismo ^
     const guardarEnLocalStorage = () => {
         localStorage.setItem('rutas_kids', JSON.stringify(rutas));
     };
@@ -232,7 +265,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            // Eliminar un niño que ya está en la ruta
+            
             tarjeta.addEventListener('eliminar-estudiante', (e) => {
                 const { id, indice } = e.detail;
                 const ruta = rutas.find(r => r.id == id);
@@ -243,14 +276,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            // Editar el nombre de la ruta o el conductor desde la tarjeta
+           
             tarjeta.addEventListener('editar-ruta-inline', (e) => {
                 const { id, nuevoNombre, nuevoConductor } = e.detail;
                 const ruta = rutas.find(r => r.id == id);
 
                 if (!ruta) return;
 
-                // Validación: ya existe
+               
                 if (rutas.some(r => r.id != id && r.nombre.toLowerCase() === nuevoNombre.toLowerCase())) {
                     alert('Ya existe una ruta con ese nombre.');
                     
@@ -268,7 +301,28 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    // tenemos el clima y muestra las rutas que ya esten guardadas
+    
     obtenerClima();
     renderizarRutas();
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//git checkout -b nombre-de-tu-rama
+//git push -u origin nombre-de-tu-rama//

@@ -18,9 +18,16 @@
             <button id="nav-rutas" class="btn-nav activo">📍 Rutas</button>
             <button id="nav-estudiantes" class="btn-nav">🎓 Estudiantes</button>
             <button id="nav-conductores" class="btn-nav">🚌 Conductores</button>
+            <button id="nav-rutas-norte" class="btn-nav"> Norte</button>
+            <button id="nav-rutas-sur" class="btn-nav"> Sur</button>
+            <button id="nav-rutas-centro" class="btn-nav"> Centro</button>
         </nav>
 
         <div id="vista-rutas" class="vista-activa">
+            
+            <div id="vista-rutas-norte" class="vista-oculta"></div>
+            <div id="vista-rutas-sur" class="vista-oculta"></div>
+            <div id="vista-rutas-centro" class="vista-oculta"></div>
 
         <section id="seccion-formulario-ruta">
             <h2>Agregar Nueva Ruta</h2>
@@ -50,6 +57,15 @@
         <div id="vista-estudiantes" class="vista-oculta">
             <section>
                 <h2>Lista de Estudiantes</h2>
+                <div class="filtro-contenedor" style="margin-bottom: 20px;">
+                    <label for="filtro-ruta-estudiantes"><strong>Filtrar por ruta:</strong></label>
+                    <select id="filtro-ruta-estudiantes" class="input-inline">
+                        <option value="Todas">Todas</option>
+                        <option value="Ruta Norte">Ruta Norte</option>
+                        <option value="Ruta Sur">Ruta Sur</option>
+                        <option value="Ruta Centro">Ruta Centro</option>
+                    </select>
+                </div>
                 <div id="contenedor-todos-estudiantes" class="contenedor-lista-simple"></div>
             </section>
         </div>
@@ -57,7 +73,7 @@
         <div id="vista-conductores" class="vista-oculta">
             <section>
                 <h2>Lista de Conductores</h2>
-                <div id="contenedor-todos-conductores" class="contenedor-lista-simple"></div>
+            <div id="contenedor-todos-conductores" class="contenedor-lista-simple"></div>
             </section>
         </div>
     </div>
@@ -65,5 +81,3 @@
     <script src="main.js" type="module"></script>
 </body>
 </html>
-
-
